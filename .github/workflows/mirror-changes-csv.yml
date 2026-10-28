@@ -1,0 +1,26 @@
+# PropRubric rule-change log mirror. Runs on GitHub's side: every 6 hours it fetches the LIVE CSV from proprubric.com and
+# commits it only when it changed, so this copy can never be ahead of or behind the site by more than the schedule.
+# Decision 2026-10-28 (PropRubric): a mirror only if it is automatic; a stale copy contradicts the /about/ fact sheet.
+name: Mirror changes.csv from proprubric.com
+on:
+  schedule:
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch the live CSV
+        run: |
+          curl -fsSL -A "proprubric-mirror/1.0" -o rule-changes.csv.new https://proprubric.com/data/changes.csv
+          head -1 rule-changes.csv.new | grep -q "^date,firm_id" || { echo "unexpected content"; exit 1; }
+          mv rule-changes.csv.new rule-changes.csv
+      - name: Commit if changed
+        run: |
+          git config user.name "proprubric-mirror"
+          git config user.email "contact@proprubric.com"
+          git add rule-changes.csv
+          git diff --cached --quiet && echo "no change" || { git commit -m "rule-changes.csv from proprubric.com, $(date -u +%F)" && git push; }

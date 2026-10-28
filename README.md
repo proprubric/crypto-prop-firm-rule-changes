@@ -16,15 +16,15 @@ PropRubric is an independent crypto prop firm research site run by the PropRubri
 | Column | Meaning |
 |---|---|
 | `date` | Day the change was verified (YYYY-MM-DD) |
-| `firm_id` | Firm slug, matching `https://proprubric.com/firms/<firm_id>/` |
+| `firm_id` | Firm slug, matching `https://proprubric.com/crypto/reviews/<firm_id>/` |
 | `field` | The rule or value that changed |
 | `old_value` | Value before the change |
 | `new_value` | Value after the change |
 | `source_url` | The firm's own page the new value was read from |
 | `note` | What happened and when |
-| `type` | `Firm change` (the firm changed its rule, 57 rows), `PropRubric correction` (PropRubric fixed its own record, 48) or `PropRubric addition` (a value recorded for the first time, 139) |
+| `type` | `Firm change` (the firm changed its rule, 91 rows), `PropRubric correction` (PropRubric fixed its own record, 75) or `PropRubric addition` (a value recorded for the first time, 141) |
 
-This copy is a snapshot and is refreshed monthly. For the current data, use the live CSV above.
+This copy is refreshed automatically every 6 hours from the live CSV by the GitHub Action in `.github/workflows/mirror-changes-csv.yml`, and a commit is made only when a row changed. The row counts above are kept in step by the same Action.
 
 ## License
 
